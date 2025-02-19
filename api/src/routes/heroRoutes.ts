@@ -38,8 +38,24 @@ router.get('/hero', async(req: Request, res: Response) => {
     if (heroes.length === 0) {
         res.status(204).send();
     }
-    console.log(heroes)
     res.status(200).json(heroes);
+});
+
+router.get('/hero/:id', async(req: Request, res: Response) => {
+    const heroId = Number(req.params.id);
+    const heroIndex = heroes.findIndex(h => h.id === heroId);    
+
+    if (heroIndex === -1) {
+        res.status(404).json({ error: 'Hero not found' });
+    }
+
+    res.status(200).json({ message: 'Hero found!' });
+});
+
+
+router.delete('/hero/:id', async (req: Request, res: Response) => {
+    console.log(`Received DELETE request for hero ID: ${req.params.id}`);
+    res.json({ message: 'Debugging...' });
 });
 
 export default router;

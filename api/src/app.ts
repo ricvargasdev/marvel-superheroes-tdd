@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -7,11 +8,12 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow React frontend
-    methods: ['GET', 'POST'], // Allowed HTTP methods
+    origin: '*',
+    methods: ['GET', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type']
 }));
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', heroRoutes);
 
 const PORT = process.env.PORT || 3000;

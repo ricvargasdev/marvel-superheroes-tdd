@@ -2,8 +2,6 @@ import { useState } from "react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-console.log('========== HeroModal ==========');
-
 interface Hero {
   id: number;
   name: string;
@@ -60,7 +58,6 @@ export default function HeroModal({ onClose, onHeroAdded }: Props) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="border p-2 w-full mb-2"
-            required
           />
           <input
             type="text"
@@ -68,7 +65,6 @@ export default function HeroModal({ onClose, onHeroAdded }: Props) {
             value={thumbnail}
             onChange={(e) => setThumbnail(e.target.value)}
             className="border p-2 w-full mb-2"
-            required
           />
           <div className="flex justify-end mt-4">
             <button type="button" onClick={onClose} className="mr-2 bg-gray-400 text-white px-4 py-2">

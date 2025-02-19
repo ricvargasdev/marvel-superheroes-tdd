@@ -56,10 +56,7 @@ export default function HeroTable() {
                   <img src={hero.thumbnail} alt={hero.name} className="w-16 h-16 object-cover" />
                 </td>
                 <td className="border p-2">
-                    <button
-                        className="bg-red-500 text-white px-4 py-2"
-                        onClick={() => deleteHero(hero.id)} // Call delete function
-                    >
+                    <button className="bg-red-500 text-white px-4 py-2" onClick={() => deleteHero(hero.id)}>
                         Delete
                     </button>
                 </td>
