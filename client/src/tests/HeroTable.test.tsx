@@ -17,11 +17,13 @@ describe('HeroTable', () => {
   it('removes a hero when the delete button is clicked', async () => {
     render(<HeroTable />);
 
+    const ironMan = await screen.findByText('Iron Man');
     const spiderMan = await screen.findByText('Spider-Man');
     const deleteButtons = screen.getAllByText('Delete');
 
     fireEvent.click(deleteButtons[0]);
 
-    await waitFor(() => expect(spiderMan).not.toBeInTheDocument());
+    await waitFor(() => expect(ironMan).not.toBeInTheDocument());
+    await waitFor(() => expect(spiderMan).toBeInTheDocument());
   });
 });
