@@ -25,8 +25,17 @@ export default function HeroTable() {
     setHeroes([...heroes, newHero]);
   };
 
-  const deleteHero = (id: number) => {
-    setHeroes(heroes.filter(hero => hero.id !== id));
+  const deleteHero = async (id: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/hero/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (response.ok) {
+      setHeroes(heroes.filter(hero => hero.id !== id));
+    } else {
+      alert("Error removing hero");
+    }
   };
 
   return (

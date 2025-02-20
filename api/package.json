@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node dist/app.js",
-    "dev": "nodemon --ext ts --exec ts-node src/app.ts"
+    "dev": "npx nodemon src/app.ts"
   },
   "keywords": [],
   "author": "",

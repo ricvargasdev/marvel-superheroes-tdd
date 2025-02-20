@@ -22,19 +22,26 @@ async function fetchHeroFromMarvel(name: string, age?: number): Promise<Hero | n
     try {
         const response = await axios.get(`${BASE_URL}`, {
             params: { name, ts, apikey: MARVEL_PUBLIC_KEY, hash },
+            timeout: 10000
         });
         const data = response.data.data.results[0];
-        console.log(data);
+        console.log(`data: ${data}`);
 
-        if (!data) return null;
+        if (data === undefined){
+            return null;
+        };
         return {
             id: data.id,
             name: data.name,
             description: data.description,
             thumbnail: `${data.thumbnail.path}.${data.thumbnail.extension}`
         };
-    } catch (error) {
-        console.error('Marvel API error:', error);
+    } catch (error: any) {
+        if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+            console.error('Marvel API request timed out.');
+        } else {
+            console.error('Marvel API error:', error);
+        }
         return null;
     }
 }

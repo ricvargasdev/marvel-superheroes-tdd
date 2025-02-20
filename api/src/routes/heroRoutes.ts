@@ -7,27 +7,25 @@ const router = express.Router();
 
 router.post('/hero', async (req: Request, res: Response) => {
     try {
-        const { name } = req.body;
+        const { name, description, thumbnail } = req.body;
         if (!name) {
             res.status(400).json({ error: 'Hero name is required' });
+            return;
         }
 
-        let hero: Hero | undefined = heroes.find(h => h.name.toLowerCase() === name.toLowerCase());
+        let hero = await fetchHeroFromMarvel(name);
 
-        if (!hero) {
-            const fetchedHero = await fetchHeroFromMarvel(name);
-            if (fetchedHero) {
-                heroes.push(fetchedHero);
-                hero = fetchedHero;
+        if(!hero){
+            hero = {
+                id: Date.now(),
+                name: name,
+                description: description,
+                thumbnail: thumbnail
             }
         }
+        heroes.push(hero);
 
-        if (hero) {
-            res.json(hero);
-        }
-
-        res.status(404).json({ error: 'Hero not found' });
-
+        res.status(200).json(hero);
     } catch (error) {
         console.error('Error fetching hero:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -36,26 +34,35 @@ router.post('/hero', async (req: Request, res: Response) => {
 
 router.get('/hero', async(req: Request, res: Response) => {
     if (heroes.length === 0) {
-        res.status(204).send();
+        console.log('No heroes in the database');
+        res.status(204).json({message: 'No heroes in the database'});
+        return;
     }
     res.status(200).json(heroes);
 });
 
 router.get('/hero/:id', async(req: Request, res: Response) => {
     const heroId = Number(req.params.id);
-    const heroIndex = heroes.findIndex(h => h.id === heroId);    
+    const hero = heroes.find(h => Number(h.id) === heroId);
+
+    if (isNaN(hero?.id)) {
+        res.status(404).json({ error: 'Hero not found' });
+        return;
+    }
+    res.status(200).json(hero);
+});
+
+// TODO: Implement 'delete'
+router.delete('/hero/:id', async (req: Request, res: Response) => {
+    const heroId = Number(req.params.id);
+    const heroIndex = heroes.findIndex(h => Number(h.id) === heroId);
 
     if (heroIndex === -1) {
         res.status(404).json({ error: 'Hero not found' });
+        return;
     }
-
-    res.status(200).json({ message: 'Hero found!' });
-});
-
-
-router.delete('/hero/:id', async (req: Request, res: Response) => {
-    console.log(`Received DELETE request for hero ID: ${req.params.id}`);
-    res.json({ message: 'Debugging...' });
+    heroes.splice(heroIndex, 1);
+    res.status(200).json({ message: 'Hero deleted successfully' });
 });
 
 export default router;
