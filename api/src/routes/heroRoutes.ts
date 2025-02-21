@@ -5,6 +5,13 @@ import { Hero } from '../models/hero';
 
 const router = express.Router();
 
+router.get('/getHeroFromMarvel/:name', async(req: Request, res: Response) => {
+    const name = req.params.name;
+    let hero = await fetchHeroFromMarvel(name);
+
+    res.status(200).json(hero);
+});
+
 router.post('/hero', async (req: Request, res: Response) => {
     try {
         const { name, description, thumbnail } = req.body;
