@@ -8,3 +8,5 @@ Notes:
 This application was bootstrapped using Vite.
 
 API calls are mocked for testing using MSW.
+
+** STEP 1 **
